@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Songs Homepage - Welcome to My Music Store</title>
+  <style type="text/css">
+    body {
+      width: 800px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Welcome to My Music Store</h1>
+</header>
+<main>
+  <h2>Choose a song:</h2>
+  <form method="POST" action="/listSongs">
+    <div th:each="song : ${songs}">
+      <input type="radio" name="trackId" th:value="${song.trackId}">
+      <span th:text="'Title: ' + ${song.title} + ', Genre: ' + ${song.genre} + ', Release Year: ' + ${song.releaseYear}"></span>
+      <br/>
+    </div>
+    <br/>
+    <input type="submit" value="Submit">
+  </form>
+</main>
+</body>
+</html>
