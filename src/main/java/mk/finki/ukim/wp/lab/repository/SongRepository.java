@@ -13,7 +13,6 @@ public class SongRepository {
 
     public SongRepository() {
         songs = new ArrayList<>();
-        // Initialize with 5 songs
         songs.add(new Song("1", "Sweet Child O' Mine", "Rock", 1987));
         songs.add(new Song("2", "Livin' on a Prayer", "Rock", 1986));
         songs.add(new Song("3", "Space Oddity", "Rock", 1969));
@@ -35,9 +34,15 @@ public class SongRepository {
     public Artist addArtistToSong(Artist artist, Song song) {
         Song existingSong = findByTrackId(song.getTrackId());
         if (existingSong != null) {
-            existingSong.getPerformers().add(artist);
+            if (!existingSong.getPerformers().contains(artist)) {
+                artist.addSongPerformed(existingSong);
+                existingSong.getPerformers().add(artist);
+                System.out.println("Added " + artist.getFirstName() + " to " + existingSong.getTitle());
+                System.out.println("Artist's songs: " + artist.getSongsPerformed().size());
+            }
             return artist;
         }
         return null;
     }
+
 }
