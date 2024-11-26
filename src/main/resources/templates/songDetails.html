@@ -3,21 +3,64 @@
 <head>
     <meta charset="utf-8">
     <title>Song Details</title>
+    <style>
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        .song-info {
+            margin: 20px 0;
+        }
+        .performers-list {
+            margin: 20px 0;
+        }
+        .album-info {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
 <header>
-    <h1 th:text="${song.title}">Song title</h1>
+    <h1 th:text="${song.title}">Song Title</h1>
 </header>
-<section>
-    <h2 th:text="'Genre: ' + ${song.genre}">Genre</h2>
-    <h2 th:text="'Year: ' + ${song.releaseYear}">Year</h2>
+
+<div th:if="${success}" class="success" th:text="${success}"></div>
+
+<div class="song-info">
+    <p><strong>Track ID:</strong> <span th:text="${song.trackId}"></span>
+    </p>
+    <p><strong>Genre:</strong> <span th:text="${song.genre}"></span></p>
+    <p><strong>Release Year:</strong> <span th:text="${song.releaseYear}"></span></p>
+</div>
+
+<div class="album-info">
+    <h2>Album Information</h2>
+    <p><strong>Name:</strong> <span th:text="${song.album.name}"></span></p>
+    <p><strong>Genre:</strong> <span th:text="${song.album.genre}"></span></p>
+    <p><strong>Release Year:</strong> <span th:text="${song.album.releaseYear}"></span></p>
+</div>
+
+<div class="performers-list">
     <h2>Performers:</h2>
-    <ul>
-        <li th:each="performer : ${song.performers}"
-            th:text="${performer.firstName + ' ' + performer.lastName}">
+    <ul th:if="${not #lists.isEmpty(song.performers)}">
+        <li th:each="performer : ${song.performers}">
+            <span th:text="${performer.firstName + ' ' + performer.lastName}"></span>
+            - <span th:text="${performer.bio}"></span>
         </li>
     </ul>
-    <a href="/listSongs">Back to songs list</a>
-</section>
+    <p th:if="${#lists.isEmpty(song.performers)}">No performers added yet.</p>
+</div>
+
+<div class="actions">
+    <a th:href="@{/songs}" class="btn">Back to Songs List</a>
+    <a th:href="@{/artists/add(songId=${song.trackId})}" class="btn btn-sm">Add Artist</a>
+</div>
 </body>
 </html>

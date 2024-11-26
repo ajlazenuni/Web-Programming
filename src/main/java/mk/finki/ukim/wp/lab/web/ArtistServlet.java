@@ -16,6 +16,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.List;
 
 
 @WebServlet(name = "artist-servlet", urlPatterns = "/artist")
@@ -24,7 +25,9 @@ public class ArtistServlet extends HttpServlet {
     private final SongService songService;
     private final SpringTemplateEngine templateEngine;
 
-    public ArtistServlet(ArtistService artistService, SongService songService, SpringTemplateEngine templateEngine) {
+    public ArtistServlet(ArtistService artistService,
+                         SongService songService,
+                         SpringTemplateEngine templateEngine) {
         this.artistService = artistService;
         this.songService = songService;
         this.templateEngine = templateEngine;
@@ -32,26 +35,22 @@ public class ArtistServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String songId = req.getParameter("songId");
+        List<Artist> artists = artistService.listArtists();
+
         IWebExchange webExchange= JakartaServletWebApplication.buildApplication(getServletContext()).buildExchange(req, resp);
-        WebContext context=new WebContext(webExchange);
-        String trackId = req.getParameter("trackId");
-        context.setVariable("artists", artistService.listArtists());
-        context.setVariable("trackId", trackId);
+        WebContext context=new WebContext(webExchange);        context.setVariable("artists", artists);
+        context.setVariable("songId", songId);
+
         templateEngine.process("artistsList.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String artistId = req.getParameter("artistId");
-        String trackId = req.getParameter("trackId");
+        String songId = req.getParameter("songId");
+        Long artistId = Long.parseLong(req.getParameter("artistId"));
 
-        Artist artist = artistService.findById(Long.parseLong(artistId));
-        Song song = songService.findByTrackId(trackId);
-
-        if (artist != null && song != null) {
-            songService.addArtistToSong(artist, song);
-        }
-
-        resp.sendRedirect("/songDetails?trackId=" + trackId);
+        songService.addArtistToSong(artistId, songId);
+        resp.sendRedirect("/songs/details/" + songId);
     }
 }

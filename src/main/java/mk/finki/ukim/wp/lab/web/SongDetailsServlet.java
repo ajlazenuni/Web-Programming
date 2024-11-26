@@ -14,7 +14,8 @@ import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
 
-@WebServlet(name = "song-details-servlet", urlPatterns = "/songDetails")
+
+@WebServlet(name = "song-details-servlet", urlPatterns = "/songs/details/*")
 public class SongDetailsServlet extends HttpServlet {
     private final SongService songService;
     private final SpringTemplateEngine templateEngine;
@@ -26,11 +27,14 @@ public class SongDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String pathInfo = req.getPathInfo();
+        String songId = pathInfo.substring(1); // Remove leading slash
+
+        Song song = songService.getDetailsForSong(songId);
         IWebExchange webExchange= JakartaServletWebApplication.buildApplication(getServletContext()).buildExchange(req, resp);
         WebContext context=new WebContext(webExchange);
-        String trackId = req.getParameter("trackId");
-        Song song = songService.findByTrackId(trackId);
         context.setVariable("song", song);
+
         templateEngine.process("songDetails.html", context, resp.getWriter());
     }
 }

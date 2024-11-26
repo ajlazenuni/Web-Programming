@@ -2,55 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>Add new Performer to Song</title>
-  <style type="text/css">
-    body {
-      width: 800px;
-      margin: auto;
-    }
-    table {
-      width:100%;
-    }
-    table, td, th {
-      border: 1px solid black;
-      padding:3px 2px;
-    }
-    section {
-      float: left;
-      margin: 0 1.5%;
-      width: 63%;
-    }
-    aside {
-      float: right;
-      margin: 0 1.5%;
-      width: 30%;
-    }
-  </style>
-</head>
+  <title>Add Artist to Song</title>
+  <link rel="stylesheet" th:href="@{/static/css/styles.css}"/></head>
 <body>
-<header>
-  <h1>Select the Artist to add to the List of Performers</h1>
-</header>
-<section>
-  <h2>Select artist:</h2>
-  <form method="POST" action="/artist">
-    <input type="hidden" name="trackId" th:value="${trackId}">
-    <div th:each="artist : ${artists}">
-      <input type="radio" name="artistId" th:value="${artist.id}">
-      <span th:text="${artist.firstName + ' ' + artist.lastName}"></span>
-      <br/>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+  <h1>Add Artist to Song</h1>
+
+  <!-- Show selected song info -->
+  <div class="song-info" th:if="${song != null}">
+    <h2>Selected Song:</h2>
+    <p>
+      <strong>Title:</strong> <span th:text="${song.title}"></span><br/>
+      <strong>Track ID:</strong> <span th:text="${song.trackId}"></span>
+    </p>
+  </div>
+
+  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+  <form th:action="@{/artists/add-to-song}" method="post">
+    <input type="hidden" name="songId" th:value="${songId}"/>
+
+    <div class="artist-list">
+      <h2>Select an Artist:</h2>
+      <div class="artist-option" th:each="artist : ${artists}">
+        <input type="radio"
+               name="artistId"
+               th:value="${artist.id}"
+               th:id="'artist' + ${artist.id}"
+               required/>
+        <label th:for="'artist' + ${artist.id}">
+          <span th:text="${artist.firstName + ' ' + artist.lastName}"></span>
+          - <span th:text="${artist.bio}"></span>
+        </label>
+      </div>
     </div>
-    <br/>
-    <input type="submit" value="Add artist">
+
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-primary">Add Selected Artist</button>
+      <a th:href="@{/songs}" class="btn">Cancel</a>
+    </div>
   </form>
-</section>
-<aside>
-  <table>
-    <tr>
-      <td><b>Track Id</b></td>
-      <td th:text="${trackId}"></td>
-    </tr>
-  </table>
-</aside>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

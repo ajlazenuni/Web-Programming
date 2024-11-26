@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.wp.lab.model.Song;
 import mk.finki.ukim.wp.lab.service.SongService;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -13,6 +14,7 @@ import org.thymeleaf.web.IWebExchange;
 import org.thymeleaf.web.servlet.JakartaServletWebApplication;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "song-list-servlet", urlPatterns = "/listSongs")
 public class SongListServlet extends HttpServlet {
@@ -26,15 +28,17 @@ public class SongListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Song> songs = songService.listSongs();
         IWebExchange webExchange= JakartaServletWebApplication.buildApplication(getServletContext()).buildExchange(req, resp);
         WebContext context=new WebContext(webExchange);
-        context.setVariable("songs", songService.listSongs());
+        context.setVariable("songs", songs);
+
         templateEngine.process("listSongs.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String trackId = req.getParameter("trackId");
-        resp.sendRedirect("/artist?trackId=" + trackId);
+        String selectedSongId = req.getParameter("songId");
+        resp.sendRedirect("/artists?songId=" + selectedSongId);
     }
 }

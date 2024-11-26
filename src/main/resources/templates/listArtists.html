@@ -1,48 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <title>Artists and Their Songs</title>
-  <style type="text/css">
-    body {
-      width: 800px;
-      margin: auto;
-      font-family: Arial, sans-serif;
-    }
-    .artist-card {
-      border: 1px solid #ddd;
-      margin: 20px 0;
-      padding: 20px;
-      border-radius: 5px;
-    }
-    .songs-list {
-      margin-left: 20px;
-    }
-  </style>
+    <meta charset="utf-8">
+    <title>Artists and Their Songs</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+            font-family: Arial, sans-serif;
+        }
+        .artist-card {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .songs-list {
+            margin-left: 20px;
+        }
+        .no-songs {
+            color: #666;
+            font-style: italic;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
+
 <h1>Artists and Their Songs</h1>
 
 <div th:each="artist : ${artists}" class="artist-card">
-  <h2 th:text="${artist.firstName + ' ' + artist.lastName}">Artist Name</h2>
-  <p th:text="${artist.bio}">Bio</p>
+    <h2 th:text="${artist.firstName + ' ' + artist.lastName}">Artist Name</h2>
+    <p th:text="${artist.bio}">Bio</p>
 
-  <h3>Songs performed:</h3>
-  <div th:if="${artist.songsPerformed.isEmpty()}" class="no-songs">
-    No songs recorded yet
-  </div>
-  <div th:unless="${artist.songsPerformed.isEmpty()}" class="songs-list">
-    <ul>
-      <li th:each="song : ${artist.songsPerformed}"
-          th:text="${song.title + ' (' + song.releaseYear + ') - ' + song.genre}">
-        Song details
-      </li>
-    </ul>
-  </div>
+    <h3>Songs performed:</h3>
+    <div th:if="${artist.songsPerformed == null || artist.songsPerformed.empty}" class="no-songs">
+        No songs recorded yet
+    </div>
+    <div th:if="${artist.songsPerformed != null && !artist.songsPerformed.empty}" class="songs-list">
+        <ul>
+            <li th:each="song : ${artist.songsPerformed}"
+                th:text="${song.title + ' (' + song.releaseYear + ') - ' + song.genre}">
+                Song details
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div>
-  <a href="/listSongs">Back to Songs List</a>
+    <a th:href="@{/songs}" class="btn">Back to Songs List</a>
 </div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

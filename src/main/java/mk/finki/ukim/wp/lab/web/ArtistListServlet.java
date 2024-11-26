@@ -34,7 +34,7 @@ public class ArtistListServlet extends HttpServlet {
         System.out.println("Number of artists: " + artists.size());
         artists.forEach(artist -> {
             System.out.println("Artist: " + artist.getFirstName() + " " + artist.getLastName());
-            System.out.println("Songs performed: " + artist.getSongsPerformed().size());
+          //  System.out.println("Songs performed: " + artist.getSongsPerformed().size());
         });
         context.setVariable("artists", artists);
         templateEngine.process("listArtists.html", context, resp.getWriter());

@@ -2,32 +2,102 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
-  <title>Songs Homepage - Welcome to My Music Store</title>
+  <title>Songs List</title>
   <style type="text/css">
     body {
       width: 800px;
       margin: auto;
     }
+    .error {
+      color: red;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #f5f5f5;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      color: white;
+      background-color: #007bff;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-<header>
-  <h1>Welcome to My Music Store</h1>
-</header>
-<div style="margin-bottom: 20px;">
-  <a href="/artists">View All Artists and Their Songs</a>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="header-actions">
+  <h1>Songs List</h1>
+  <a th:href="@{/artists}" class="btn">View All Artists</a>
 </div>
-<main>
-  <h2>Choose a song:</h2>
-  <form method="POST" action="/listSongs">
-    <div th:each="song : ${songs}">
-      <input type="radio" name="trackId" th:value="${song.trackId}">
-      <span th:text="'Title: ' + ${song.title} + ', Genre: ' + ${song.genre} + ', Release Year: ' + ${song.releaseYear}"></span>
-      <br/>
-    </div>
-    <br/>
-    <input type="submit" value="Submit">
-  </form>
-</main>
+
+<div th:if="${success}" class="success" th:text="${success}"></div>
+<div th:if="${error}" class="error" th:text="${error}"></div>
+
+<table>
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Track ID</th>
+    <th>Genre</th>
+    <th>Release Year</th>
+    <th>Album</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="song : ${songs}">
+    <td th:text="${song.title}"></td>
+    <td th:text="${song.trackId}"></td>
+    <td th:text="${song.genre}"></td>
+    <td th:text="${song.releaseYear}"></td>
+    <td th:text="${song.album.name}"></td>
+    <td class="actions">
+      <a th:href="@{/songs/edit-form/{id}(id=${song.id})}" class="btn btn-sm">Edit</a>
+      <form th:action="@{/songs/delete/{id}(id=${song.id})}"
+            th:method="delete"
+            style="display: inline;">
+        <button type="submit" class="btn btn-danger btn-sm"
+                onclick="return confirm('Are you sure you want to delete this song?')">
+          Delete
+        </button>
+      </form>
+      <a th:href="@{/artists/add(songId=${song.trackId})}" class="btn btn-sm">Add Artist</a>
+      <a th:href="@{/songs/details/{id}(id=${song.trackId})}" class="btn btn-sm">Details</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="header-content">
+        <h1>Music Library</h1>
+        <nav>
+            <a href="/songs">Songs</a>
+            <a href="/songs/add-form">Add New Song</a>
+        </nav>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+</header>
+</body>
+</html>

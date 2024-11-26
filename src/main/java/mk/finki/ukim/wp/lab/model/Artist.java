@@ -1,7 +1,6 @@
 package mk.finki.ukim.wp.lab.model;
 
 import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,21 +17,30 @@ public class Artist {
         this.firstName = firstName;
         this.lastName = lastName;
         this.bio = bio;
-        this.songsPerformed = new ArrayList<>();
+        this.songsPerformed = new ArrayList<>();  // Initialize the list
     }
+
+    // Existing getters and setters...
+
     public List<Song> getSongsPerformed() {
-        if (songsPerformed == null) {
-            songsPerformed = new ArrayList<>();
-        }
         return songsPerformed;
     }
 
-    public void addSongPerformed(Song song) {
-        if (!getSongsPerformed().contains(song)) {
-            getSongsPerformed().add(song);
-        if (!song.getPerformers().contains(this)) {
-                song.getPerformers().add(this);
-            }
+    public void setSongsPerformed(List<Song> songsPerformed) {
+        this.songsPerformed = songsPerformed;
+    }
+
+    // Helper methods for managing the songs list
+    public void addSong(Song song) {
+        if (this.songsPerformed == null) {
+            this.songsPerformed = new ArrayList<>();
+        }
+        this.songsPerformed.add(song);
+    }
+
+    public void removeSong(Song song) {
+        if (this.songsPerformed != null) {
+            this.songsPerformed.remove(song);
         }
     }
 }
