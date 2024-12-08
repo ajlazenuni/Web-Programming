@@ -2,7 +2,7 @@ package mk.finki.ukim.wp.lab.service.impl;
 
 
 import mk.finki.ukim.wp.lab.model.Artist;
-import mk.finki.ukim.wp.lab.repository.ArtistRepository;
+import mk.finki.ukim.wp.lab.repository.jpa.ArtistRepository;
 import mk.finki.ukim.wp.lab.service.ArtistService;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class ArtistServiceImpl implements ArtistService {
             throw new IllegalArgumentException("Search name cannot be empty");
         }
 
-        List<Artist> matchingArtists = artistRepository.findByNameContainingIgnoreCase(name);
+        List<Artist> matchingArtists = artistRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(name, name);
 
         if (matchingArtists.isEmpty()) {
             throw new RuntimeException("No artists found matching: " + name);

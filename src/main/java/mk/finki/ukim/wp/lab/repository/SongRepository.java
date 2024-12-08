@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Repository
 public class SongRepository {
     public List<Song> findAll() {
         return DataHolder.songs;

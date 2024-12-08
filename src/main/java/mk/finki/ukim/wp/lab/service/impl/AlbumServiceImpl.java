@@ -3,7 +3,7 @@ package mk.finki.ukim.wp.lab.service.impl;
 
 import mk.finki.ukim.wp.lab.model.Album;
 import mk.finki.ukim.wp.lab.model.exceptions.AlbumNotFoundException;
-import mk.finki.ukim.wp.lab.repository.AlbumRepository;
+import mk.finki.ukim.wp.lab.repository.jpa.AlbumRepository;
 import mk.finki.ukim.wp.lab.service.AlbumService;
 import org.springframework.stereotype.Service;
 

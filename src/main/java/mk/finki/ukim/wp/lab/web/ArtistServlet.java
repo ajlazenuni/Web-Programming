@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@WebServlet(name = "artist-servlet", urlPatterns = "/artist")
+//@WebServlet(name = "artist-servlet", urlPatterns = "/artist")
 public class ArtistServlet extends HttpServlet {
     private final ArtistService artistService;
     private final SongService songService;

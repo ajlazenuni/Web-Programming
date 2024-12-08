@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-@Repository
 public class ArtistRepository {
     public List<Artist> findAll() {
         return DataHolder.artists;

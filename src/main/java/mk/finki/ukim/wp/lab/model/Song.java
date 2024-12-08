@@ -1,20 +1,39 @@
 package mk.finki.ukim.wp.lab.model;
-import lombok.Data;
-import mk.finki.ukim.wp.lab.model.Album;
-import mk.finki.ukim.wp.lab.model.Artist;
 
+import jakarta.persistence.*;
+import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Entity
+@Table(name = "songs")
 public class Song {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String trackId;
+
     private String title;
     private String genre;
     private int releaseYear;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "song_artists",
+            joinColumns = @JoinColumn(name = "song_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> performers;
+
+    @ManyToOne
     private Album album;
+
+    public Song() {
+        this.performers = new ArrayList<>();
+    }
 
     public Song(Long id, String trackId, String title, String genre, int releaseYear, Album album) {
         this.id = id;
@@ -24,24 +43,8 @@ public class Song {
         this.releaseYear = releaseYear;
         this.performers = new ArrayList<>();
         this.album = album;
-
     }
 
-    // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getTrackId() { return trackId; }
-    public void setTrackId(String trackId) { this.trackId = trackId; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
-    public int getReleaseYear() { return releaseYear; }
-    public void setReleaseYear(int releaseYear) { this.releaseYear = releaseYear; }
-    public List<Artist> getPerformers() { return performers; }
-    public void setPerformers(List<Artist> performers) { this.performers = performers; }
-    public Album getAlbum() { return album; }
-    public void setAlbum(Album album) { this.album = album; }
     public void addPerformer(Artist artist) {
         if (this.performers == null) {
             this.performers = new ArrayList<>();
@@ -50,4 +53,5 @@ public class Song {
             this.performers.add(artist);
         }
     }
+
 }

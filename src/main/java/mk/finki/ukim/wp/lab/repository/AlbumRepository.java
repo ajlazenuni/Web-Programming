@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-@Repository
+
 public class AlbumRepository {
     public List<Album> findAll() {
         return DataHolder.albums;
