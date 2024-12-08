@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -23,7 +23,12 @@ public class ArtistRepository {
                 .filter(a -> a.getId().equals(id))
                 .findFirst();
     }
-
+    public List<Artist> findByNameContainingIgnoreCase(String name) {
+        String lowerCaseName = name.toLowerCase();
+        return DataHolder.artists.stream()
+                .filter(artist -> artist.getFirstName().toLowerCase().contains(lowerCaseName))
+                .collect(Collectors.toList());
+    }
     public Artist save(Artist artist) {
         DataHolder.artists.removeIf(a -> a.getId().equals(artist.getId()));
         DataHolder.artists.add(artist);

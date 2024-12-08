@@ -30,6 +30,25 @@ public class ArtistServiceImpl implements ArtistService {
         });
         return artists;
     }
+    @Override
+    public Artist searchByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Search name cannot be empty");
+        }
+
+        List<Artist> matchingArtists = artistRepository.findByNameContainingIgnoreCase(name);
+
+        if (matchingArtists.isEmpty()) {
+            throw new RuntimeException("No artists found matching: " + name);
+        }
+
+        Artist artist = matchingArtists.get(0);
+        if (artist.getSongsPerformed() == null) {
+            artist.setSongsPerformed(new ArrayList<>());
+        }
+
+        return artist;
+    }
 
     @Override
     public Artist findById(Long id) {

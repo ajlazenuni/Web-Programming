@@ -7,4 +7,6 @@ import java.util.List;
 public interface ArtistService {
     List<Artist> listArtists();
     Artist findById(Long id);
+
+    Artist searchByName(String name);
 }

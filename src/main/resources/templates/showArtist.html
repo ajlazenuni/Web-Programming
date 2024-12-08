@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Artists Search</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f5f5f5;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div class="header-actions">
+    <h1>Artists Search</h1>
+    <a th:href="@{/artists}" class="btn">View All Artists</a>
+</div>
+
+<!-- Search Artists Form -->
+<div class="header-actions">
+    <h2>Search for Artist by Name</h2>
+    <form action="#" th:action="@{/artists/search}" method="get">
+        <input type="text" name="name" placeholder="Search for artist by name" required />
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+
+<div th:if="${success}" class="success" th:text="${success}"></div>
+<div th:if="${error}" class="error" th:text="${error}"></div>
+
+<!-- Display Artists Based on Search Results -->
+<div th:if="${artists}">
+    <h3>Search Results</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="artist : ${artists}">
+            <td th:text="${artist.name}"></td>
+            <td th:text="${artist.genre}"></td>
+            <td class="actions">
+                <a th:href="@{/artists/details/{id}(id=${artist.id})}" class="btn btn-sm">View Details</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:if="${artists == null or #lists.isEmpty(artists)}">
+    <p>No artists found with the given name.</p>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

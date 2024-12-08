@@ -21,24 +21,32 @@ public class ArtistController {
         this.songService = songService;
     }
 
-    @GetMapping("/add")  // Changed this mapping
+    @GetMapping("/add")
     public String getAddArtistPage(@RequestParam String songId, Model model) {
         try {
             model.addAttribute("artists", artistService.listArtists());
             model.addAttribute("songId", songId);
             model.addAttribute("song", songService.findByTrackId(songId));
-            return "artistsList";  // This should match exactly with your artistsList.html template
+            return "artistsList";
         } catch (RuntimeException ex) {
             return "redirect:/songs?error=" + ex.getMessage();
         }
     }
-
-    @GetMapping  // Keep this for listing all artists
+    @GetMapping
     public String getArtistsPage(Model model) {
         model.addAttribute("artists", artistService.listArtists());
-        return "listArtists";  // This will use listArtists.html
+        return "listArtists";
     }
-
+    @GetMapping("/search")
+    public String searchArtists(@RequestParam String name, Model model) {
+        try {
+            model.addAttribute("artists", artistService.searchByName(name));
+            return "listArtists";
+        } catch (RuntimeException ex) {
+            model.addAttribute("error", "Error occurred while searching for artists.");
+            return "listArtists";
+        }
+    }
     @PostMapping("/add-to-song")
     public String addArtistToSong(
             @RequestParam Long artistId,
@@ -51,7 +59,7 @@ public class ArtistController {
             return "redirect:/songs/details/" + songId;
         } catch (RuntimeException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
-            return "redirect:/artists/add?songId=" + songId;  // Updated this redirect
+            return "redirect:/artists/add?songId=" + songId;
         }
     }
 }

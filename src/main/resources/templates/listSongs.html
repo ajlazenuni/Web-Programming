@@ -54,9 +54,17 @@
   </style>
 </head>
 <body>
+
 <div th:replace="fragments/header :: header"></div>
 
 <div class="header-actions">
+
+    <h2>Search Artists</h2>
+    <form action="#" th:action="@{/artists/search}" method="get">
+      <input type="text" name="name" placeholder="Search for artist by name" required />
+      <button type="submit" class="btn">Search</button>
+    </form>
+
   <h1>Songs List</h1>
   <a th:href="@{/artists}" class="btn">View All Artists</a>
 </div>
